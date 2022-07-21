@@ -1,0 +1,24 @@
+.category-buttons{
+    display: flex;
+    gap: 1vw;
+    flex-wrap: wrap;
+    margin-left: 20px;
+}
+.category-btn{
+    padding: 5px;
+    border: 1px solid lightblue;
+    background-color: lightblue;
+    border-radius: 7px;
+    cursor: pointer;
+}
+.category-btn:hover{
+    background-color: #fff;
+    transition: .5s;
+}
+
+.show-items-category{
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1vw;
+}

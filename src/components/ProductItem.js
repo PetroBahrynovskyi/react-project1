@@ -3,7 +3,7 @@ import '../styles/general.css';
 import itemImg from '../images/item-img.webp';
 const ProductItem = ({name = 'name', salePrice = 'salePrice', image = itemImg, description=''}) => {
     const [isFocused, setIsFocused] = useState(false);
-
+    
 
     useEffect(() => {
         
@@ -14,7 +14,7 @@ const ProductItem = ({name = 'name', salePrice = 'salePrice', image = itemImg, d
     return (
         <div
         onMouseOver={showDesc} 
-        className={`productInf${isFocused ? " show" : " "}`}>
+        className={`productInf`}>
             <img src={image}/>
             <div>
                 <p className='productName'>{name}</p>

@@ -1,50 +1,50 @@
-import React, {useState, useEffect } from 'react';
+import React  from 'react';
 import '../styles/general.css';
 import ProductItem from './ProductItem';
 import SearchBox from './SearchBox';
-import itemImg from '../images/item-img.webp';
-
-const  DisplayItems  = () =>  {
-
-    const [productList, setProductList] = useState([]);
-    const [detailProduct, setDetailProduct] = useState([]);
-    const [searchValue, setSearchValue] = useState("");
-
-    useEffect(() => {
-        processData();
-    });
+import ProductList from './ProductList';
+import SearchResultList from './SearchResultList';
+import ProductCategories from './ProductCategories';
 
 
-    const processData =  () => {
+class  DisplayItems extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            productList: [],
+            detailProduct: [],
+            searchValue: ""
+        }
+    }
+
+
+    componentDidMount(){
+        this.processData();
+    }    
+    processData =  () => {
         let url = 'https://fakestoreapi.com/products';
-            fetch(url)
-            .then((res) => res.json())
-            .then(data => {
-                setProductList(data);
-            });    
-    } 
+        fetch(url)
+        .then((res) => res.json())
+        .then(data => {
+            this.setState({productList: data});
+        });    
+    }
     
-
+    getDetailProduct = (returnedValue) => {
+        this.setState({detailProduct : returnedValue});
+    }
+    
+    render(){
+        
     return (
         <>
-            <SearchBox searchQuery={productList}/>
-            <span className='space'></span>
-            <span className='list-of-found'>
-                {/* Why it doesn't work?) */}
-                {detailProduct.length >=0 ? detailProduct.map((item) => {
-                    return <ProductItem key={'key__' + item.title + '' + item.salePrice + ''} name={item.title} salePrice={item.price} image={item.image}/>
-                }) : <ProductItem name="" salePrice="" image={itemImg}/>}
-            </span>
-            <span className='space'></span>
-                <div className='products-wrapper'>   
-                    
-                    {productList.map((item) =>{
-                        return <ProductItem key={'key__' + item.title + '' + item.salePrice + ''} name={item.title} salePrice={item.price} image={item.image} />
-                    })
-                    }
-            </div>
+            <SearchBox searchItems={this.state.productList} gettingProduct={this.getDetailProduct}/>
+            <ProductCategories buttons={this.state.productList}/>
+            <SearchResultList detailProduct={this.state.detailProduct}/>
+            <ProductList list={this.state.productList}/>
         </>
-    );
+        );
+    }
 }
 
 
@@ -67,4 +67,11 @@ export default DisplayItems;
 4. OnMouseOver - вивести item.description замість вікна з фото
 5.  За допопомгою fetch зробити request на google.com і передати як параметр пошук product.title в гуглі. Взяти посилання на 1 результат в гуглі 
 
+*/
+
+
+/*
+1. Створити компонент SearchResultList. 
+2. Кожен компонент повинен мати свою папку і свої стилі
+3. Додати кнопки з категоріями. Коли натискаю на кнопку категорії, фільтрую компоненти по категорії  
 */

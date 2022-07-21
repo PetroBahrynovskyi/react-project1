@@ -4,35 +4,34 @@ class SearchBox extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            searchValue: "",
-            detailProduct: null,
-            searchQuery : this.props.searchQuery
-        }
-        this.props = {
-            searchValue : this.state.searchValue,
-            detailProduct : this.state.detailProduct,
-            searchQuery : this.state.searchQuery
+            searchList: [],
+            detailProduct: [],
+            searchValue: ""
         }
     }
 
-     searhProduct = () => {
-        const notFoundProduct = [{
-            name: "Item not found:(",
-            salePrice: "0",
-            image: itemImg
-        }]
-        const sortProduct = this.state.searchQuery.filter((item) => {
+    componentDidMount(){
+       
+    }
+    
+    searhProduct = () => {
+        this.props.gettingProduct(this.state.detailProduct);
+        const arr = [...this.props.searchItems];
+        console.log(this.state.searchValue);
+       
+        console.log(arr);
+        const sortProduct = arr.filter((item) => {
             let seekingSentence = item.title.toLowerCase();
             let seekingWord = this.state.searchValue.toLowerCase();
             return seekingWord.length >=3 && seekingSentence.startsWith(seekingWord);
-        })
-        this.setState({detailProduct : notFoundProduct });
+        });
+        
         (this.state.detailProduct.length >=0) ? this.setState({detailProduct : sortProduct}) :
-        this.setState({detailProduct : notFoundProduct});
-         console.log(this.state.detailProduct);
+        this.setState({detailProduct : `Product not Found`});
     }
-
+    
     render(){
+        
         return(
             <div className="search">
                     <input 
@@ -40,8 +39,8 @@ class SearchBox extends React.Component {
                     onChange={(e) => {this.setState({searchValue: e.target.value})}}
                     type="text"
                     className="search_input"/>
-                    <button className="search_btn" onClick={() => this.searhProduct()}>Go</button>
-                    <span className="correct-name"></span>
+                    <button className="search_btn" onClick={() => {this.searhProduct()}}>Go</button>                    
+
             </div>
         )
     }

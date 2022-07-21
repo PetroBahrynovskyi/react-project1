@@ -81,8 +81,10 @@
 .desription{
     position: absolute;
     width: 100%;
-    height: 100%;
-    background-color: #fff;
+    height: 80%;
+    background-color: lightgrey;
+    opacity: 0.8;
+    padding: 20px;
     display: none;
 }
 .productInf.show .desription{
@@ -96,8 +98,7 @@
     background-color: lightblue;
     border-radius: 7px;
     cursor: pointer;
-    display: flex;
-    align-self: center;
+  
 }
 
 /* categories */
@@ -118,3 +119,13 @@
     background-color: #fff;
     transition: .5s;
 }
+
+.show-items-category{
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1vw;
+}
+.wrapper-general{
+    display: flex;
+    justify-content: center;}

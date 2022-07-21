@@ -34,12 +34,13 @@ class  DisplayItems extends React.Component {
         this.setState({detailProduct : returnedValue});
     }
     
+    
     render(){
         
     return (
         <>
             <SearchBox searchItems={this.state.productList} gettingProduct={this.getDetailProduct}/>
-            <ProductCategories buttons={this.state.productList}/>
+            <ProductCategories buttons={this.state.productList} />
             <SearchResultList detailProduct={this.state.detailProduct}/>
             <ProductList list={this.state.productList}/>
         </>

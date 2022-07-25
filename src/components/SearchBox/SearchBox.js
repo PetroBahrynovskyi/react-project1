@@ -5,7 +5,7 @@ class SearchBox extends React.Component {
         super(props);
         this.state = {
             searchList: [],
-            detailProduct: [],
+            filteredProductList: [],
             searchValue: ""
         }
     }
@@ -15,11 +15,8 @@ class SearchBox extends React.Component {
     }
     
     searhProduct = () => {
-        this.props.gettingProduct(this.state.detailProduct);
+        this.props.gettingProduct(this.state.filteredProductList);
         const arr = [...this.props.searchItems];
-        console.log(this.state.searchValue);
-       
-        console.log(arr);
         const sortProduct = arr.filter((item) => {
             let seekingSentence = item.title.toLowerCase();
             let seekingWord = this.state.searchValue.toLowerCase();

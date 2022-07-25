@@ -1,0 +1,15 @@
+.productRatingFilter{
+    display: flex;
+    margin-top: 20px;
+    padding: 20px;
+    
+
+}
+.productRatingFilter-items{
+    display: flex;
+    gap: 1vw;
+}
+.productRating-select{
+    width: 50px;
+    border: 1px solid grey;
+}

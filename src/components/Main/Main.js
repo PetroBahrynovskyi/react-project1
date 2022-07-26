@@ -12,16 +12,16 @@ class Main extends React.Component {
 
 
     render(){
-        console.log(`Main`);
-        console.log(this.props);
         return(
             <section className='main'>
                 <Sidebar 
                 productItems={this.props.productItems}
-                getAllProducts={this.props.getAllProducts()}
+                getAllProducts={() => this.props.getAllProducts(true)}
                 />
-                <Products 
-                getAllProducts={this.props.getAllProducts}
+                <Products
+                productItems={this.props.productItems} 
+                displayAllProducts={this.props.displayAllProducts}
+                onDisplayAllProducts={() => this.props.onDisplayAllProducts(this.props.productItems)}
                 />
             </section>
         );

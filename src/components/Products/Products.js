@@ -6,7 +6,7 @@ class Products extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            
+        
         }
     }
 
@@ -15,10 +15,9 @@ class Products extends React.Component {
 
 
     render(){
-        console.log(this.props);
         return(
             <div className='products'>
-                {this.props.getAllProducts && <span>Showed</span>}
+                {this.props.displayAllProducts && this.props.onDisplayAllProducts(this.props.productItems)}
             </div>
         );
     }

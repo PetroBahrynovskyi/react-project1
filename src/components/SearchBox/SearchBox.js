@@ -36,7 +36,7 @@ class SearchBox extends React.Component {
                     onChange={(e) => {this.setState({searchValue: e.target.value})}}
                     type="text"
                     className="search_input"/>
-                    <button className="search_btn" onClick={() => {this.searhProduct()}}>Go</button>                    
+                    <button className="search_btn" onClick={() => {this.searhProduct()}}>Search</button>                    
 
             </div>
         )

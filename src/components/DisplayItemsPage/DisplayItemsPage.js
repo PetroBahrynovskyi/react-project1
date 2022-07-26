@@ -24,6 +24,7 @@ class  DisplayItems extends React.Component {
     componentDidMount(){
         this.processData();
     }    
+
     processData =  () => {
         let url = 'https://fakestoreapi.com/products';
         fetch(url)
@@ -31,30 +32,42 @@ class  DisplayItems extends React.Component {
             .then(data => {
                 this.setState({productList: data});
             });    
-        }
-    
-    getDetailProduct = (handleSearchTxtChange) => {
-        this.setState({filteredProductList : handleSearchTxtChange});
-    }
-    
-    getAllProducts = (returnedValue) => {
-        this.setState({ displayAllProducts : returnedValue})
     }
 
+    
     displayAllProducts (arr)  {
         return arr.map((item) => {
             return <ProductItem key={'key__' + item.title + '' + item.salePrice + ''} name={item.title} salePrice={item.price} image={item.image} description={this.state.categoryToShow}/>
         })
     }
 
+    displayFilterButtons (arr) {
+        return Array.from(new Set(arr.map((item) => item.category))).map((item, i) => {
+            return <button key={i} className="category-btn" onClick={() => {this.sortProducts(item)}}>{`${item}`}</button>
+        })
+    }
+
+    
+    getDetailProduct = (handleSearchTxtChange) => {
+        this.setState({filteredProductList : handleSearchTxtChange});
+    }
+    
+
+    getAllProducts = (returnedValue) => {
+        this.setState({ displayAllProducts : returnedValue})
+    }
+
+
+    
     render(){
-        console.log(this.state);
         return (
             <>
             <Header/>  
             <Main
             productItems={this.state.productList}
             getAllProducts={() => this.getAllProducts(true)}
+            displayAllProducts={this.state.displayAllProducts}
+            onDisplayAllProducts={() => this.displayAllProducts(this.state.productList)}
             />
             </>
         );

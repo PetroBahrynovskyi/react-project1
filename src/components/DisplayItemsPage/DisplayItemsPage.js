@@ -41,6 +41,13 @@ class  DisplayItems extends React.Component {
         })
     }
 
+    displayFilterButtons (arr) {
+        return Array.from(new Set(arr.map((item) => item.category))).map((item, i) => {
+            return <button key={i} className="category-btn" onClick={() => {this.sortProducts(item)}}>{`${item}`}</button>
+        })
+    }
+
+    
     getDetailProduct = (handleSearchTxtChange) => {
         this.setState({filteredProductList : handleSearchTxtChange});
     }
@@ -51,7 +58,7 @@ class  DisplayItems extends React.Component {
     }
 
 
-   
+    
     render(){
         return (
             <>

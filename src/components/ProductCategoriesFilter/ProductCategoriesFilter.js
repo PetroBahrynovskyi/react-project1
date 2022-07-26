@@ -23,14 +23,10 @@ class ProductCategoriesFilter extends React.Component {
     
 
     render(){
-       
-
         return(
             <div className="productCategories">
                 <div className="category-buttons">
-                    <button className="category-btn" onClick={() => {
-                        this.props.getAllProducts(true)
-                    }}>All</button>
+                    <button className="category-btn" onClick={() => {this.props.getAllProducts(true)}}>All</button>
                     {Array.from(new Set(this.props.productItems.map((item) => item.category))).map((item, i) => {
                         return <button key={i} className="category-btn" onClick={() => {this.sortProducts(item)}}>{`${item}`}</button>
                     })}

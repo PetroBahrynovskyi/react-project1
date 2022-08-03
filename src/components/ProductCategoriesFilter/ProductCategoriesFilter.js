@@ -12,7 +12,7 @@ const  ProductCategoriesFilter = (props) =>  {
                         return <button 
                                 key={i} 
                                 className="category-btn"
-                                onClick={() => {props.onFilterByCategories(item)}}>
+                                onClick={() => {props.onCategoryChange(item)}}>
                                 {`${item}`}
                             </button> 
                     })

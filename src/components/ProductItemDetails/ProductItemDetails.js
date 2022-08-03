@@ -1,30 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ProductItemDetails.css';
 import DisplayItems from '../DisplayItemsPage/DisplayItemsPage';
-import {Routes, Route, Link } from 'react-router-dom';
-const ProductItemDetails = ({detailedProductToshow}) => {
-    const product = detailedProductToshow;
+import { Routes, Route, Link, useParams } from 'react-router-dom';
+
+const ProductItemDetails = () => {
+    const [product, setProduct ] = useState()
+    const { productId } = useParams();
+
+    useEffect(() => {
+        //TODO
+        //use product id for fetching product detauls
+        
+        //fetch(https://fakestoreapi.com/products/ + prodcutId)......
+        
+    });
     return (
         <>
-        {detailedProductToshow && 
-        <div className='detail-product'>
-           
-            <div className='detail-product__inf'>
-                <div className='detail-product__image'>
-                  <img src={product.image}/>
-                </div>
-                <div className='detail-product__details'>
-                    <p className='detail-product__details-title'>{product.title}</p>
-                    <p className='detail-product__details-price'>{product.price}</p>
-                    <p className='detail-product__details-category'>{product.category}</p>
-                    <p className='detail-product__details-rating'>{product.rating.rate}</p>
-                </div>      
-            </div>       
-            <div className='detail-product__description'>
-
-            </div>       
-        </div>
-        }
+      
+            <div>value of :produtId is {productId}</div>
+            
     
         </>
     );

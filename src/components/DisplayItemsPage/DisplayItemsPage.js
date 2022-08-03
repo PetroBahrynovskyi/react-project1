@@ -16,10 +16,10 @@ const DisplayItems = () =>  {
  
     const [productList, setProductList] = useState([]);
     const [searchValue, setSearchValue] = useState("");
-    const [categoryToShow, setCategoryToShow] = useState("");
-    const [priceMin, setPriceMin] = useState('');
-    const [priceMax, setPriceMax] = useState('');
-    const [ratingValue, setRatingValue] = useState(0);
+    const [categoryToShow, setCategoryToShow] = useState("All");
+    const [priceMin, setPriceMin] = useState(0);
+    const [priceMax, setPriceMax] = useState(999999);
+    const [ratingValue, setRatingValue] = useState("All");
     const [productsToDisplay, setProductsToDisplay] = useState(productList);
     const [detailedProductToshow, setDetailedProductToshow] = useState();
 
@@ -40,11 +40,13 @@ const DisplayItems = () =>  {
     /* -------------- handlers -------------- */
 
     const handleMinPriceChange = (chosenPrice) => {
-        setPriceMin(chosenPrice);
+        setPriceMin(+chosenPrice);
     }
 
     const handleMaxPriceChange = (chosenPrice) => {
-        setPriceMax(chosenPrice);
+        setPriceMax(+chosenPrice);
+        //1 priceMin new value will be set to chosenPrice
+        //2 DiplayItemsPage gets rerendered
     }
 
     const handleSearchValue = (searchedText) => {
@@ -58,34 +60,30 @@ const DisplayItems = () =>  {
         setProductsToDisplay(returnedArray);
         return returnedArray;
     } 
-    const filterByCategories = (selectedCategory) => {
-        const returnedArray = productList.filter((elem) => elem.category === selectedCategory);
-        setProductsToDisplay(returnedArray);
-        return returnedArray;
+    const handleCategoryChange = (selectedCategory) => {
+        setCategoryToShow(selectedCategory);
+        filterByAllSelecteadFilter();
     } 
-    const filterByPrice = () => {   
-        const returnedArray = productsToDisplay.filter((elem) => elem.price >= priceMin &&  elem.price <= priceMax);
-        setProductsToDisplay(returnedArray);
-        return returnedArray;
+    const filterByPrice = (pricemin, pricemax) => {
+        setPriceMin(pricemin);
+        setPriceMax(pricemax);
+
+        filterByAllSelecteadFilter();
     } 
 
     const handleRatingChange = (rating) => {
-        const returnedArray = productsToDisplay.filter((elem) => {
-            return (elem.rating.rate < 3 && Math.trunc(elem.rating.rate) === +rating) ||  (Math.ceil(elem.rating.rate) === +rating);
-       });
-       setProductsToDisplay(returnedArray);
-       return returnedArray;
+        setRatingValue(rating);
+        filterByAllSelecteadFilter();
     }
 
-    const filterBySearch = (arr) => {
-        const returnedArray = productsToDisplay.filter((item) => {
-            let seekingSentence = item.title.toLowerCase();
-            let seekingWord = searchValue.toLowerCase();
-            return seekingWord.length >=3 && seekingSentence.startsWith(seekingWord);
-        });
-        setProductsToDisplay(returnedArray);
-        return returnedArray;
-    }
+
+    console.log({
+        priceMin: priceMin,
+        priceMax: priceMax,
+        searchValue: searchValue,
+        ratingValue: ratingValue,
+        categoryToShow: categoryToShow
+    });
 
     const showDetailsProduct = (name) => {
         
@@ -110,27 +108,35 @@ const DisplayItems = () =>  {
     const categories = getCategoriesFromProductList();
     const produtRatingList = getRatingFromProductList();
     
-    const filterByAllSelecteadFilter = () =>{ 
+    const filterByAllSelecteadFilter = () => {
+        let filteredArray = productList.filter((elem) => 
+            elem.price >= priceMin && elem.price <= priceMax
+        );
+        if (searchValue != '') {
+            filteredArray = filteredArray.filter((elem) => elem.title.indexOf(searchValue) >= 0 )
+        }
+
+        if (categoryToShow != 'All') {
+            filteredArray = filteredArray.filter((elem) => elem.category == categoryToShow)
+        }
         
-        let results = handleRatingChange(productsToDisplay);
-        results = filterBySearch(results);
-        results = filterByCategories(results);
-        results = filterByPrice(results);
-        return results;
+        if (ratingValue != "All") {
+            filteredArray = filteredArray.filter((elem) => elem.rating.rate >= +(ratingValue)-1);
+        }
+        return filteredArray;
     }
+
+    const fileredResults = filterByAllSelecteadFilter();
     
 
     return (             
-            <>
-            <SearchBox 
-                onSearchValueChange={handleSearchValue}
-                onFilterBySearch={filterBySearch}
-             />
+        <>
+            <SearchBox onSearchValueChange={handleSearchValue} />
+            
             <div className='sidebar'>
                 <ProductCategoriesFilter 
                     categoryList={categories} 
-                    onShowAllProducts={showAllProducts}
-                    onFilterByCategories={filterByCategories} 
+                    onCategoryChange={handleCategoryChange}
                 />
                 <ProductPriceFilter 
                     onMinPriceChange={handleMinPriceChange} 
@@ -139,18 +145,21 @@ const DisplayItems = () =>  {
                 />
                 <ProductRatingFilter 
                     ratingList={produtRatingList} 
-                    onRatingChanged={handleRatingChange}
+                    onRatingChange={handleRatingChange}
                 />
             </div>
-            <SearchResultList 
-                productsToDisplay={productsToDisplay}
+            <SearchResultList
+                productsToDisplay={fileredResults}
                 onShowDetailsProduct={showDetailsProduct}
-                />
-            {/* <ProductItemDetails productsToDisplay={productsToDisplay} detailedProductToshow={detailedProductToshow} />   */}
+            />
+            {/* <ProductItemDetails productsToDisplay={productsToDisplay} detailedProductToshow={detailedProductToshow} />  
+             * */}
                 
             </>
     );
 }
+
+
 
     
 export default DisplayItems;

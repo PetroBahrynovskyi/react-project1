@@ -1,0 +1,32 @@
+.search{
+    margin: 0 auto;
+    margin-top: 20px;
+    display: flex;
+    gap: 1vw;
+    justify-content: center;
+    grid-area: a;
+}
+.search_input{
+    width: 250px;
+    height: 40px;
+    padding: 5px;
+    border: 2px solid grey;
+    border-radius: 10px;
+    outline: none;
+    font-size: 20px;
+}
+.search_btn{
+    width: 80px;
+    height: 40px;
+    background-color: salmon;
+    border: 2px solid salmon;
+    border-radius: 40px;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+.search_btn:hover{
+    border-color: salmon;
+    background: white;
+    color: darkblue;
+}

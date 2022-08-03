@@ -1,0 +1,22 @@
+.detail-product{
+    display: flex;
+    border: 1px solid grey;
+    width: 800px;
+    height: 800px;
+}
+.detail-product__inf{
+    display: flex;
+
+}
+.detail-product__image {
+    width: 400px;
+    height: 400px;
+}
+.detail-product__image img{
+    width: 400px;
+    height: 400px;
+    max-width: 100%;
+}
+.detail-product__details-title{
+    font-size: 20px;
+}

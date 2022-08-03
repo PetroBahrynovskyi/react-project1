@@ -1,28 +1,24 @@
 import React from 'react';
 import './ProductPriceFilter.css';
 
-class ProductPriceFilter extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            
-        }
-    }
-    render(){
-        return(
+const ProductPriceFilter = (props) =>  {
+    return(
             <div className='productPriceFilter'>
                 <p>From:</p>
                 <input type="number"
                        className='productPrice priceFrom'
+                       value={props.minPrice}
+                       onChange={(e) => props.onMinPriceChange(e.target.value)}
                        />
                 <p>To:</p>
                 <input type="number"
                        className='productPrice priceTo'
+                       value={props.maxPrice}
+                       onChange={(e) => props.onMaxPriceChange(e.target.value)}
                        />    
-                <button className='btn-price'>Go</button>          
+                <button className='btn-price' onClick={() => props.onFilterByPrice()}>Go</button>          
             </div>
         );
-    }
 
 }
 

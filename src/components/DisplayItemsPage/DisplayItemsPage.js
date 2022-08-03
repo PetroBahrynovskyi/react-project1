@@ -1,102 +1,166 @@
-import React  from 'react';
+import React, { useState, useEffect }  from 'react';
 
-import Header from '../Header/Header';
-import Main from '../Main/Main';
+import SearchBox from '../SearchBox/SearchBox';
 
-import ProductItem from '../ProductItem/ProductItem';
+import ProductCategoriesFilter from '../ProductCategoriesFilter/ProductCategoriesFilter';
+import ProductPriceFilter from '../ProductPriceFilter/ProductPriceFilter';
+import ProductRatingFilter from '../ProductRatingFilter/ProductRatingFilter'
+
+import SearchResultList from '../SearchResultList/SearchResultList';
+
+import ProductItemDetails from '../ProductItemDetails/ProductItemDetails';
 
 import './DisplayItemsPage.css';
 
-class  DisplayItems extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            productList: [],
-            filteredProductList: [],
-            searchValue: "",
-            categoryToShow : "",
-            displayAllProducts : false,
-            
-        }
-    }
+const DisplayItems = () =>  {
+ 
+    const [productList, setProductList] = useState([]);
+    const [searchValue, setSearchValue] = useState("");
+    const [categoryToShow, setCategoryToShow] = useState("All");
+    const [priceMin, setPriceMin] = useState(0);
+    const [priceMax, setPriceMax] = useState(999999);
+    const [ratingValue, setRatingValue] = useState("All");
+    const [productsToDisplay, setProductsToDisplay] = useState(productList);
+    const [detailedProductToshow, setDetailedProductToshow] = useState();
 
-
-    componentDidMount(){
-        this.processData();
-    }    
-
-    processData =  () => {
+    useEffect(() => {
+        processData();
+    },[]);
+    
+    const processData = () => {
         let url = 'https://fakestoreapi.com/products';
         fetch(url)
-            .then((res) => res.json())
-            .then(data => {
-                this.setState({productList: data});
+        .then((res) => res.json())
+        .then(data => {
+            setProductList(data);
+            setProductsToDisplay(data);
+                
             });    
     }
+    /* -------------- handlers -------------- */
 
+    const handleMinPriceChange = (chosenPrice) => {
+        setPriceMin(+chosenPrice);
+    }
+
+    const handleMaxPriceChange = (chosenPrice) => {
+        setPriceMax(+chosenPrice);
+        //1 priceMin new value will be set to chosenPrice
+        //2 DiplayItemsPage gets rerendered
+    }
+
+    const handleSearchValue = (searchedText) => {
+        setSearchValue(searchedText);
+    }
+
+    /* Function that work with data from form */
     
-    displayAllProducts (arr)  {
-        return arr.map((item) => {
-            return <ProductItem key={'key__' + item.title + '' + item.salePrice + ''} name={item.title} salePrice={item.price} image={item.image} description={this.state.categoryToShow}/>
+     const showAllProducts = () => {
+        const returnedArray = productList.map((item) => item);
+        setProductsToDisplay(returnedArray);
+        return returnedArray;
+    } 
+    const handleCategoryChange = (selectedCategory) => {
+        setCategoryToShow(selectedCategory);
+        filterByAllSelecteadFilter();
+    } 
+    const filterByPrice = (pricemin, pricemax) => {
+        setPriceMin(pricemin);
+        setPriceMax(pricemax);
+
+        filterByAllSelecteadFilter();
+    } 
+
+    const handleRatingChange = (rating) => {
+        setRatingValue(rating);
+        filterByAllSelecteadFilter();
+    }
+
+
+    console.log({
+        priceMin: priceMin,
+        priceMax: priceMax,
+        searchValue: searchValue,
+        ratingValue: ratingValue,
+        categoryToShow: categoryToShow
+    });
+
+    const showDetailsProduct = (name) => {
+        
+        let detailedProduct = productList.filter((item) => item.title === name);
+        setDetailedProductToshow(...detailedProduct);
+        console.log(detailedProductToshow);
+    }
+
+    /*---- */
+
+    const getCategoriesFromProductList  = () =>  {
+        return Array.from(new Set(productList.map((item) => item.category))).map((item, i) => {
+            return item;      
         })
     }
 
-    displayFilterButtons (arr) {
-        return Array.from(new Set(arr.map((item) => item.category))).map((item, i) => {
-            return <button key={i} className="category-btn" onClick={() => {this.sortProducts(item)}}>{`${item}`}</button>
-        })
-    }
-
-    
-    getDetailProduct = (handleSearchTxtChange) => {
-        this.setState({filteredProductList : handleSearchTxtChange});
-    }
-    
-
-    getAllProducts = (returnedValue) => {
-        this.setState({ displayAllProducts : returnedValue})
+    const getRatingFromProductList = () => {
+        return Array.from(new Set(productList.map(item => item.rating.rate < 3 ? Math.trunc(item.rating.rate) : Math.ceil(item.rating.rate)))).sort();
     }
 
 
+    const categories = getCategoriesFromProductList();
+    const produtRatingList = getRatingFromProductList();
     
-    render(){
-        return (
-            <>
-            <Header/>  
-            <Main
-            productItems={this.state.productList}
-            getAllProducts={() => this.getAllProducts(true)}
-            displayAllProducts={this.state.displayAllProducts}
-            onDisplayAllProducts={() => this.displayAllProducts(this.state.productList)}
-            />
-            </>
+    const filterByAllSelecteadFilter = () => {
+        let filteredArray = productList.filter((elem) => 
+            elem.price >= priceMin && elem.price <= priceMax
         );
+        if (searchValue != '') {
+            filteredArray = filteredArray.filter((elem) => elem.title.indexOf(searchValue) >= 0 )
+        }
+
+        if (categoryToShow != 'All') {
+            filteredArray = filteredArray.filter((elem) => elem.category == categoryToShow)
+        }
+        
+        if (ratingValue != "All") {
+            filteredArray = filteredArray.filter((elem) => elem.rating.rate >= +(ratingValue)-1);
+        }
+        return filteredArray;
     }
+
+    const fileredResults = filterByAllSelecteadFilter();
+    
+
+    return (             
+        <>
+            <SearchBox onSearchValueChange={handleSearchValue} />
+            
+            <div className='sidebar'>
+                <ProductCategoriesFilter 
+                    categoryList={categories} 
+                    onCategoryChange={handleCategoryChange}
+                />
+                <ProductPriceFilter 
+                    onMinPriceChange={handleMinPriceChange} 
+                    onMaxPriceChange={handleMaxPriceChange}
+                    onFilterByPrice={filterByPrice}
+                />
+                <ProductRatingFilter 
+                    ratingList={produtRatingList} 
+                    onRatingChange={handleRatingChange}
+                />
+            </div>
+            <SearchResultList
+                productsToDisplay={fileredResults}
+                onShowDetailsProduct={showDetailsProduct}
+            />
+            {/* <ProductItemDetails productsToDisplay={productsToDisplay} detailedProductToshow={detailedProductToshow} />  
+             * */}
+                
+            </>
+    );
 }
+
 
 
     
 export default DisplayItems;
 
-
-/*
-1. Render (productList = [])
-2. ComponentDidMount
-
-*/
-
-/*
-    Home Task
-1. Events in React (onFocus, OnMouseEnter, OnMouseOver, OnBlur, OnKeyPressed, OnKeyUp, OnKeyDown) => створити 7-8 функцій, юзати івенти
-2. Пошук повинен здійснюватись при введенні тексту в інпут, а не при натисканні. Пошук повинен здійснюватись після введенні 3 символів або більше
-3. SearchBox - створити окремий компонент
-4. OnMouseOver - вивести item.description замість вікна з фото
-5.  За допопомгою fetch зробити request на google.com і передати як параметр пошук product.title в гуглі. Взяти посилання на 1 результат в гуглі 
-
-*/
-
-/*
-1. Створити компонент SearchResultList. 
-2. Кожен компонент повинен мати свою папку і свої стилі
-3. Додати кнопки з категоріями. Коли натискаю на кнопку категорії, фільтрую компоненти по категорії  
-*/

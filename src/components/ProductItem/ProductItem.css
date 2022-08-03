@@ -8,6 +8,8 @@
     border-radius: 5px;
     padding: 5px;
     position: relative;
+    background-color: white;
+    cursor: pointer;
 }
 .productInf img {
     width: 250px;

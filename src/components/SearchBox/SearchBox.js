@@ -1,46 +1,19 @@
 import React from "react";
 import './SearchBox.css';
-class SearchBox extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            searchList: [],
-            filteredProductList: [],
-            searchValue: ""
-        }
-    }
+const SearchBox = (props) =>  {
 
-    componentDidMount(){
-       
-    }
-    
-    searhProduct = () => {
-        this.props.gettingProduct(this.state.filteredProductList);
-        const arr = [...this.props.searchItems];
-        const sortProduct = arr.filter((item) => {
-            let seekingSentence = item.title.toLowerCase();
-            let seekingWord = this.state.searchValue.toLowerCase();
-            return seekingWord.length >=3 && seekingSentence.startsWith(seekingWord);
-        });
-        
-        (this.state.detailProduct.length >=0) ? this.setState({detailProduct : sortProduct}) :
-        this.setState({detailProduct : `Product not Found`});
-    }
-    
-    render(){
-        
-        return(
+
+
+    return(
             <div className="search">
                     <input 
-                    value = {this.state.searchValue}
-                    onChange={(e) => {this.setState({searchValue: e.target.value})}}
-                    type="text"
-                    className="search_input"/>
-                    <button className="search_btn" onClick={() => {this.searhProduct()}}>Search</button>                    
+                        value = {props.searchValue}
+                        onChange={(e) => {props.onSearchValueChange(e.target.value)}}
+                        type="text"
+                        className="search_input"/>
+                    <button className="search_btn" onClick={() => {props.onFilterBySearch()}}>Search</button>                    
 
             </div>
         )
-    }
-
 }
 export default SearchBox;

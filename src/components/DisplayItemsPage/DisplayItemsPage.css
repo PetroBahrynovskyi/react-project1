@@ -1,0 +1,15 @@
+.App{
+    display: grid;
+        grid-template-areas:
+                        "a a a "
+                        "b c c ";
+
+                    
+}
+
+.sidebar{
+    display: flex;
+    flex-direction: column;
+    width: 20vw;
+    grid-area: b;
+}
